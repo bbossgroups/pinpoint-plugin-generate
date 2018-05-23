@@ -1,0 +1,106 @@
+This is a pinpoint agent plugin generate tool.
+# 第1章	pinpoint插件生成工具概述
+````
+pinpoint默认提供大量通用组件和服务的日志采集插件，如果需要监控应用系统自带的类文件，bboss为pinpoint提供了插件扩展工具包，通过一些简单的配置，即可快速实现自定义类的监控插件。
+本文以分布式全文检索elasticsearch客户端bboss elasticsearch组件为实例，介绍服务调用链路日志采集插件的编写及集成方法，对应的两个类为：
+org.frameworkset.elasticsearch.client.ConfigRestClientUtil
+org.frameworkset.elasticsearch.client.RestClientUtil
+````
+
+# 第2章 准备
+````
+安装jdk 1.7+
+安装gradle 4+，并配置好环境变量
+下载源码构建工具
+````
+# 第3章 通过gradle构建发布工具
+
+gradle clean releaseVersion
+
+# 第4章 使用工具生成插件
+gradle构建成功后，在build/distributions目录下会生成可以运行的zip包，解压工具到目录plugin-generator，并切换到该目录下
+
+## 步骤1 配置生成插件脚本：plugin-generator/resource/plugin.properties
+````
+# 自定义插件属性描述文件，工具根据本描述文件生产类的监控插件
+## 定义插件作者
+plugin.author=yinbp
+
+## 定义插件版本号
+plugin.version=0.0.1
+## 定义插件名称
+plugin.name=bbosselastic
+
+## 定义插件服务名称
+plugin.serviceName=BBossElastic
+
+## 定义插件程序对应的类路径
+plugin.package=org.test.plugin.bbosselastic
+
+## 定义插件对应的服务类型代码，serviceType需要向开发组申请，必须保持全局唯一,并且是short类型的数字
+## UNDEFINED_CATEGORY((short)-1, (short)-1),
+#    PINPOINT_INTERNAL((short)0, (short)999),
+#    SERVER((short)1000, (short)1999),
+#    DATABASE((short)2000, (short)2999),
+#    LIBRARY((short)5000, (short)7999),
+#    CACHE_LIBRARY((short)8000, (short)8999, BaseHistogramSchema.FAST_SCHEMA),
+#    RPC((short)9000, (short)9999);
+##
+plugin.serviceType=1027
+## 参数key，需要向开发组申请，必须保持全局唯一,并且是short类型的数字
+plugin.argKeyCode=911
+
+## 定义默认是否启用插件
+profiler.enable=true
+
+## 定义是否采集被监控类方法的返回数据，返回数据中包含对象时，请自行提供对象的toString()方法，一般不要开启采集方法返回值的机制，严重影响性能
+profiler.recordResult=false
+
+## 定义是否采集方法参数，方法参数中包含对象时，请自行提供对象的toString()方法
+profiler.recordArgs=true
+
+## 定义需要被监控的类及类方法信息，多个类用空格分隔
+## 类的方法信息通过|追加在类路径后面，多个方法用逗号分隔，方法信息定义语法：
+# * 拦截所有方法，还可以指定特殊的需要排除拦截的方法
+# *~1 拦截所有方法，还可以指定特殊的需要排除拦截的方法
+# *~0 不拦截所有方法，还可以指定特殊的需要拦截的方法
+# methodA 拦截名称为methodA对应的方法
+# methodB 拦截名称为methodB对应的方法
+# methodB* 拦截名称以methodB开头的方法
+
+# methodA~1 拦截名称为methodA对应的方法
+# methodB~1 拦截名称为methodB对应的方法
+# methodB*~1 拦截名称以methodB开头的方法
+
+# methodA~0 不拦截名称为methodA对应的方法
+# methodB~0 不拦截名称为methodB对应的方法
+# methodB*~0 不拦截名称以methodB开头的方法
+# 上面的定义可以任意组合定义
+# 注意：类信息和方法描述信息间不能有空格，因为空格为不同类的分隔符
+##
+plugin.interceptor.classes=org.frameworkset.elasticsearch.client.ConfigRestClientUtil|*,discover~0 \                           
+                           org.frameworkset.elasticsearch.client.RestClientUtil|*,discover~0
+## 插件采集的链路日志类型：
+## spanevent，上下文环境没有trace，丢弃日志数据，有trace则加入其中，日志被记录
+## spantrace(默认值), 上下文环境没有trace，创建trace并记录日志数据，有trace则加入其中
+##
+plugin.interceptor.type=spantrace
+## 插件定义完毕后，是否清空过程中产生的临时文件，true 清空 false 不清空
+plugin.deleteFilesAfterGen=false
+
+````
+
+## 步骤2 生成插件
+````
+windows执行plugin-generator/startup.bat指令，linux执行plugin-generator/startup.sh，从而生成插件jar包和插件集成操作说明文档：
+
+插件包所在目录：
+plugin-generator/dist/ bbosselastic-0.0.1.jar
+帮助文件所在目录：
+plugin-generator/dist/plugin.config
+````
+## 步骤3插件集成
+参考生成的帮助文档plugin-generator/dist/plugin.config集成插件.
+
+ 
+

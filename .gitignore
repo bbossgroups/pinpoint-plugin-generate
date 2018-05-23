@@ -21,3 +21,11 @@ $RECYCLE.BIN/
 # =========================
 # Operating System Files
 # =========================
+/build/
+/bin/
+/out/
+/.classpath
+/.project
+/.svn
+/.gradle
+/.settings
