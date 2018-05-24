@@ -1,8 +1,8 @@
 This is a pinpoint agent plugin generate tool.
 # 第1章	pinpoint插件生成工具概述
 ````
-pinpoint默认提供大量通用组件和服务的日志采集插件，如果需要监控应用系统自带的类文件，bboss为pinpoint提供了插件扩展工具包，通过一些简单的配置，即可快速实现自定义类的监控插件。
-本文以分布式全文检索elasticsearch客户端bboss elasticsearch组件为实例，介绍服务调用链路日志采集插件的编写及集成方法，对应的两个类为：
+pinpoint默认提供大量通用组件和服务的日志采集插件，如果需要监控应用系统自带的类文件，bboss为pinpoint提供了自定义插件生成工具包，通过一些简单的配置，即可快速实现自定义类的监控插件。
+本文以分布式全文检索elasticsearch客户端[bboss elasticsearch!](https://www.oschina.net/p/bboss-elastic)组件为实例，介绍服务调用链路日志采集插件的编写及集成方法，需要监控的两个bboss elasticsearch组件类：
 org.frameworkset.elasticsearch.client.ConfigRestClientUtil
 org.frameworkset.elasticsearch.client.RestClientUtil
 ````
@@ -11,7 +11,7 @@ org.frameworkset.elasticsearch.client.RestClientUtil
 ````
 安装jdk 1.7+
 安装gradle 4+，并配置好环境变量
-下载源码构建工具
+下载工具源码
 ````
 # 第3章 通过gradle构建发布工具
 
@@ -81,8 +81,8 @@ profiler.recordArgs=true
 plugin.interceptor.classes=org.frameworkset.elasticsearch.client.ConfigRestClientUtil|*,discover~0 \                           
                            org.frameworkset.elasticsearch.client.RestClientUtil|*,discover~0
 ## 插件采集的链路日志类型：
-## spanevent，上下文环境没有trace，丢弃日志数据，有trace则加入其中，日志被记录
-## spantrace(默认值), 上下文环境没有trace，创建trace并记录日志数据，有trace则加入其中
+## spanevent，上下文环境没有trace，丢弃日志数据，有trace则加入其中，日志被记录,spanevent类型用于生成普通的日志采集插件
+## spantrace(默认值), 上下文环境没有trace，创建trace并记录日志数据，有trace则加入其中，spantrace即可用于生成普通的日志采集插件，亦可以用于生成服务器端点使用的插件
 ##
 plugin.interceptor.type=spantrace
 ## 插件定义完毕后，是否清空过程中产生的临时文件，true 清空 false 不清空
