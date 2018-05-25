@@ -103,5 +103,48 @@ plugin-generator/dist/plugin.config
 ## 步骤3插件集成
 参考生成的帮助文档plugin-generator/dist/plugin.config集成插件.
 
+以下是为案例插件自动生成的帮助文档plugin.config内容：
+````
+#1 分发插件包
+分发插件包
+步骤1 分发插件包(bbosselastic-0.0.1.jar)到collector部署目录（以实际目录为准）：
+/home/elk/apache-tomcat-8.0.42-collector/webapps/collector/WEB-INF/lib
+然后重启collector
+
+步骤2 分发插件包(bbosselastic-0.0.1.jar)到web控制台部署目录（以实际目录为准）：
+
+/home/elk/tomcat-7.0.57-web/webapps/ROOT/WEB-INF/lib
+然后重启web
+
+
+步骤3 分发插件包(bbosselastic-0.0.1.jar)到被监控应用探针agent部署目录（以实际目录为准）：
+插件对应应用被监控应用探针agent/plugin目录，
+
+步骤4 将以下内容添加到探针配置文件agent/pinpoint.config文件中,然后重启采用这个探针的相关应用：
+profiler.bbosselastic.enabled=true
+profiler.bbosselastic.recordResult=false
+profiler.bbosselastic.recordArgs=true
+
+
+
+#2 分发dist/images下的图标到web控制台部署目录
+两张插件的logo图片，一张大图images/servermap/BBossElastic.png，一张小图images/icons/BBossElastic.png,图标名称为plugin.serviceName对应的值，例如：
+BBossElastic.png
+
+拷贝图片到路径（以实际目录为准）：
+小图标路径地址：/home/elk/tomcat-7.0.57-web/webapps/ROOT/images/icons/BBossElastic.png
+大图标路径地址：/home/elk/tomcat-7.0.57-web/webapps/ROOT/images/servermap/BBossElastic.png
+需要将服务类型和图片名称加入js文件/components/server-map2/jquery.ServerMap2.js的htIcons 中：
+Then, add ServiceType name and the image file name to htIcons in
+/components/server-map2/jquery.ServerMap2.js
+
+"htIcons": {
+
+。。。。。。。。。。。
+'BBossElastic': 'BBossElastic.png'
+},
+
+````
+
  
 

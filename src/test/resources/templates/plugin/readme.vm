@@ -6,7 +6,7 @@
 
 步骤2 分发插件包(${pluginName}-${pluginVersion}.jar)到web控制台部署目录（以实际目录为准）：
 
-/home/elk/tomcat-7.0.57-blackcat/webapps/ROOT/WEB-INF/lib
+/home/elk/tomcat-7.0.57-web/webapps/ROOT/WEB-INF/lib
 然后重启web
 
 
@@ -26,8 +26,8 @@ profiler.${pluginName}.recordArgs=${recordArgs}
 ${serviceName}.png
 
 拷贝图片到路径（以实际目录为准）：
-小图标路径地址：/home/elk/tomcat-7.0.57-blackcat/webapps/ROOT/images/icons/${serviceName}.png
-大图标路径地址：/home/elk/tomcat-7.0.57-blackcat/webapps/ROOT/images/servermap/${serviceName}.png
+小图标路径地址：/home/elk/tomcat-7.0.57-web/webapps/ROOT/images/icons/${serviceName}.png
+大图标路径地址：/home/elk/tomcat-7.0.57-web/webapps/ROOT/images/servermap/${serviceName}.png
 需要将服务类型和图片名称加入js文件/components/server-map2/jquery.ServerMap2.js的htIcons 中：
 Then, add ServiceType name and the image file name to htIcons in
 /components/server-map2/jquery.ServerMap2.js
