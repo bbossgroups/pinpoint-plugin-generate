@@ -11,7 +11,8 @@
 
 
 步骤3 分发插件包(${pluginName}-${pluginVersion}.jar)到被监控应用探针agent部署目录（以实际目录为准）：
-插件对应应用被监控应用探针agent/plugin目录，
+
+/home/elk/pinpoint-agent/plugin/
 
 步骤4 将以下内容添加到探针配置文件agent/pinpoint.config文件中,然后重启采用这个探针的相关应用：
 profiler.${pluginName}.enabled=${pluginEnabled}
