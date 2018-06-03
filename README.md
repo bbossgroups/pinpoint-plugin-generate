@@ -1,12 +1,18 @@
 This is a pinpoint agent plugin generate tool.
+
+以分布式全文检索elasticsearch客户端框架[bboss elasticsearch!](https://www.oschina.net/p/bboss-elastic)为实例，介绍服务调用链路日志采集插件的生成及集成方法，
+
+需要被拦截监控的bboss elasticsearch组件类文件如下：
+````
+org.frameworkset.elasticsearch.client.ConfigRestClientUtil
+org.frameworkset.elasticsearch.client.RestClientUtil
+````
 # 第1章	pinpoint插件生成工具概述
 ````
 pinpoint默认提供大量通用组件和服务链路日志采集插件，如果需要监控应用系统自带的类文件，需要自行实现agent plugin，有点复杂并且容易出错；我们基于bboss，编写了这个快速生成pinpoint agent插件的工具包。
 通过bboss pinpoint plugin genertor tool，只需要做一些简单的配置，即可快速生成应用系统自带类文件监控插件以及对应的插件集成部署文档，而且通过参数配置可以保留生成插件gradle源码工程，
 可以在源码工程的基础上进行修改和调整，从而做出更加强大的监控插件出来。
-本文以分布式全文检索elasticsearch客户端框架[bboss elasticsearch!](https://www.oschina.net/p/bboss-elastic)为实例，介绍服务调用链路日志采集插件的生成及集成方法，需要被拦截监控的bboss elasticsearch组件类文件如下：
-org.frameworkset.elasticsearch.client.ConfigRestClientUtil
-org.frameworkset.elasticsearch.client.RestClientUtil
+
 ````
 
 # 第2章 准备
