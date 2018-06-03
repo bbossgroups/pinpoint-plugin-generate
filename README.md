@@ -1,6 +1,6 @@
 This is a pinpoint agent plugin generate tool.
 
-以分布式全文检索elasticsearch客户端框架[bboss elasticsearch!](https://www.oschina.net/p/bboss-elastic)为实例，介绍服务调用链路日志采集插件的生成及集成方法，
+以分布式全文检索elasticsearch客户端框架[bboss elasticsearch](https://www.oschina.net/p/bboss-elastic)为实例，介绍服务调用链路日志采集插件的生成及集成方法，
 
 需要被拦截监控的bboss elasticsearch组件类文件如下：
 ````
