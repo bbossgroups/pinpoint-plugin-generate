@@ -94,7 +94,7 @@ plugin.interceptor.classes=org.frameworkset.elasticsearch.client.ConfigRestClien
 ## spantrace(默认值), 上下文环境没有trace，创建trace并记录日志数据，有trace则加入其中，spantrace即可用于生成普通的日志采集插件，亦可以用于生成服务器端点使用的插件
 ##
 plugin.interceptor.type=spantrace
-## 插件定义完毕后，是否清空过程中产生的临时文件(插件源码工程基于gradle)，true 清空 false 不清空
+## 插件定义完毕后，是否清空过程中产生的插件源码工程（基于gradle)，true 清空 false 不清空
 plugin.deleteFilesAfterGen=false
 
 ````
@@ -111,7 +111,7 @@ plugin-generator/dist/plugin.config
 ## 步骤3插件集成
 参考生成的帮助文档plugin-generator/dist/plugin.config集成插件.
 
-以下是为案例插件自动生成的帮助文档plugin.config内容：
+以下是为分布式全文检索elasticsearch客户端框架[bboss elasticsearch](https://www.oschina.net/p/bboss-elastic)自动生成的插件集成帮助文档plugin.config内容：
 ````
 #1 分发插件包
 分发插件包
