@@ -86,8 +86,7 @@ public class Main {
 	}
 	private static List<InterceptorClassInfo> buildInterceptorClassInfos(String originIntercepteClasses){
 		String[] _originIntercepteClasses = originIntercepteClasses.split(" ");
-		logger.info(_originIntercepteClasses[0]);
-		logger.info(_originIntercepteClasses[1]);
+		logger.info(originIntercepteClasses);
 		List<InterceptorClassInfo> intercepteClassInfos = new ArrayList<InterceptorClassInfo>();
 		int i = 0;
 		for(String clazz:_originIntercepteClasses){
