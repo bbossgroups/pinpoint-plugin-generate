@@ -107,7 +107,7 @@ public class PluginGenerator {
 				src+"/"+this.packageDir+"/"+genConfig.getServiceName()+"InterceptorClassInfo.java");
 		if(genConfig.getPluginInterceptorType().equals(GenConfig.pluginInterceptorSpanTraceType)) {
 			this.pluginProjectImageIconFile = new File(this.pluginArchiveDir,
-					"images/icon/"+genConfig.getServiceName()+".png");
+					"images/icons/"+genConfig.getServiceName()+".png");
 			this.pluginProjectImageServerMapFile = new File(this.pluginArchiveDir,
 					"images/servermap/"+genConfig.getServiceName()+".png");
 		}
@@ -209,7 +209,7 @@ public class PluginGenerator {
 				}
 				FileUtil.fileCopy(new File(this.appDir, "resources/templates/plugin/images/icons/BBoss.png"), pluginProjectImageIconFile );
 //			this.pluginProjectImageIconFile = new File(this.pluginArchiveDir,
-//					"images/icon/"+genConfig.getServiceName()+".png");
+//					"images/icons/"+genConfig.getServiceName()+".png");
 				FileUtil.fileCopy(new File(this.appDir, "resources/templates/plugin/images/servermap/BBoss.png"), pluginProjectImageServerMapFile);
 //			this.pluginProjectImageIconFile = new File(this.pluginArchiveDir,
 //					"images/servermap/"+genConfig.getServiceName()+".png");

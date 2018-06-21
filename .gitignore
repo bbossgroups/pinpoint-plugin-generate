@@ -29,3 +29,5 @@ $RECYCLE.BIN/
 /.svn
 /.gradle
 /.settings
+*.bak
+gradle.properties.bak
