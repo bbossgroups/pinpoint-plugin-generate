@@ -59,6 +59,7 @@ plugin.package=org.test.plugin.bbosselastic
 plugin.serviceType=1027
 ## 参数key，需要向开发组申请，必须保持全局唯一,并且是short类型的数字
 plugin.argKeyCode=911
+plugin.argKeyName=args_911
 
 ## 定义默认是否启用插件
 profiler.enable=true

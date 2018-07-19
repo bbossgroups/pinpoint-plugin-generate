@@ -30,7 +30,8 @@ public class ${serviceName}MetadataProvider implements TraceMetadataProvider {
 
     @Override
     public void setup(TraceMetadataSetupContext context) {
-        context.addServiceType(${serviceName}, AnnotationKeyMatchers.ARGS_MATCHER);
+        //context.addServiceType(${serviceName}, AnnotationKeyMatchers.ARGS_MATCHER);
+        context.addServiceType(${serviceName});
         //context.addServiceType(${serviceName}, AnnotationKeyMatchers.exact(AnnotationKey.ARGS0));
         context.addAnnotationKey(${serviceName}Plugin.ARGS_ANNOTATION_KEY);
     }

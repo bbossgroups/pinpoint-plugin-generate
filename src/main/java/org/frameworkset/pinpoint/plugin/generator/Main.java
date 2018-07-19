@@ -49,12 +49,25 @@ public class Main {
 
 		String argKeyCode = propertiesContainer.getProperty("plugin.argKeyCode");
 
+
 		if (argKeyCode != null){
 			try {
 				genConfig.setArgKeyCode(Short.parseShort(argKeyCode));
 			} catch (Exception e) {
 				throw new java.lang.IllegalArgumentException("plugin.argKeyCode = " + argKeyCode + ",Must be a short scope number.");
 			}
+		}
+		String argKeyName = propertiesContainer.getProperty("plugin.argKeyName");
+
+
+		if (argKeyName != null){
+			genConfig.setArgKeyName(argKeyName);
+		}
+
+		String executionPolicy = propertiesContainer.getProperty("plugin.executionPolicy");
+
+		if (executionPolicy != null){
+			genConfig.setExecutionPolicy(executionPolicy);
 		}
 
 		String enable = propertiesContainer.getProperty("profiler.enable");
