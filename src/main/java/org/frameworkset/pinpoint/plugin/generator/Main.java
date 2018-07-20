@@ -40,11 +40,32 @@ public class Main {
 		genConfig.setPluginAuthor(propertiesContainer.getProperty("plugin.author"));
 		genConfig.setPluginVersion(propertiesContainer.getProperty("plugin.version"));
 		genConfig.setServicePackage(propertiesContainer.getProperty("plugin.package"));
+		String originInterceptorType = propertiesContainer.getProperty("plugin.interceptor.type");
+		if(originInterceptorType == null){
+			originInterceptorType = GenConfig.pluginInterceptorSpanTraceType;
+		}
+		else{
+			if(!originInterceptorType.equals(GenConfig.pluginInterceptorSpanEventType) && !originInterceptorType.equals(GenConfig.pluginInterceptorSpanTraceType))
+			{
+				throw new java.lang.IllegalArgumentException("plugin.interceptor.type = "+originInterceptorType+",must be "+GenConfig.pluginInterceptorSpanEventType + " or " + GenConfig.pluginInterceptorSpanTraceType);
+			}
+		}
 		String serviceType = propertiesContainer.getProperty("plugin.serviceType");
 		try {
 			genConfig.setServiceType(Short.parseShort(serviceType));
 		} catch (Exception e) {
 			throw new java.lang.IllegalArgumentException("plugin.serviceType = " + serviceType + ",Must be a short scope number.");
+		}
+
+
+		String eventServiceType = propertiesContainer.getProperty("plugin.eventServiceType");
+		try {
+			if(originInterceptorType.equals(GenConfig.pluginInterceptorSpanTraceType ) && (eventServiceType == null || eventServiceType.equals(""))){
+				throw new java.lang.IllegalArgumentException("plugin.interceptor.type = "+originInterceptorType+",must set  plugin.eventServiceType in plugin.properties");
+			}
+			genConfig.setEventServiceType(Short.parseShort(eventServiceType));
+		} catch (Exception e) {
+			throw new java.lang.IllegalArgumentException("plugin.eventServiceType = " + eventServiceType + ",Must be a short scope number.");
 		}
 
 		String argKeyCode = propertiesContainer.getProperty("plugin.argKeyCode");
@@ -84,16 +105,7 @@ public class Main {
 		String originInterceptorClasses = propertiesContainer.getProperty("plugin.interceptor.classes");
 		genConfig.setOriginIntercepteClasses(originInterceptorClasses);
 		genConfig.setIntercepteClasses(buildInterceptorClassInfos(originInterceptorClasses));
-		String originInterceptorType = propertiesContainer.getProperty("plugin.interceptor.type");
-		if(originInterceptorType == null){
-			originInterceptorType = GenConfig.pluginInterceptorSpanTraceType;
-		}
-		else{
-			if(!originInterceptorType.equals(GenConfig.pluginInterceptorSpanEventType) && !originInterceptorType.equals(GenConfig.pluginInterceptorSpanTraceType))
-			{
-				throw new java.lang.IllegalArgumentException("plugin.interceptor.type = "+originInterceptorType+",must be "+GenConfig.pluginInterceptorSpanEventType + " or " + GenConfig.pluginInterceptorSpanTraceType);
-			}
-		}
+
 		genConfig.setPluginInterceptorType(originInterceptorType);
 		return genConfig;
 	}

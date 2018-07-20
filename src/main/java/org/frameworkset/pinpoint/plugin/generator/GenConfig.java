@@ -34,6 +34,7 @@ public class GenConfig {
 	private String serviceName;
 	private String servicePackage;
 	private int serviceType;
+	private int eventServiceType;
 	private boolean recordResult;
 	private boolean recordArgs;
 	private String pluginName;
@@ -205,5 +206,13 @@ public class GenConfig {
 
 	public void setExecutionPolicy(String executionPolicy) {
 		this.executionPolicy = executionPolicy;
+	}
+
+	public int getEventServiceType() {
+		return eventServiceType;
+	}
+
+	public void setEventServiceType(int eventServiceType) {
+		this.eventServiceType = eventServiceType;
 	}
 }

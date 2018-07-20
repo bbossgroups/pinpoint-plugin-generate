@@ -24,6 +24,7 @@ import com.navercorp.pinpoint.common.trace.AnnotationKey;
 import ${servicePackage}.${serviceName}Plugin;
 
 /**
+ * 适用于SpanEvent的拦截器
  * @author ${pluginAuthor}
  */
 public class ${serviceName}OperationInterceptor extends SpanEventSimpleAroundInterceptorForPlugin {

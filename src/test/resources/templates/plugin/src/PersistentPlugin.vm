@@ -42,7 +42,9 @@ public class ${serviceName}Plugin implements ProfilerPlugin, TransformTemplateAw
 
     public static final ServiceType ${serviceName} = ServiceTypeFactory.of(${serviceType}, "${serviceName}",RECORD_STATISTICS);
     private static final String ${serviceName}_SCOPE = "${serviceName}_SCOPE";
-
+    #if($pluginInterceptorType.equals("spantrace"))
+    public static final ServiceType ${serviceName}_EVENT = ServiceTypeFactory.of(${eventServiceType}, "${serviceName}Event");
+    #end
     private final PLogger logger = PLoggerFactory.getLogger(this.getClass());
 
     private TransformTemplate transformTemplate;
