@@ -120,6 +120,10 @@ configure(allprojects) { project ->
 	
 		compile(
 				fileTree(dir: 'lib', include: '**/*'),
+				//[group: 'com.navercorp.pinpoint', name: 'pinpoint-annotations', version: "${pinpoint_version}", transitive: false],
+				//[group: 'com.navercorp.pinpoint', name: 'pinpoint-bootstrap-core', version: "${pinpoint_version}", transitive: false],
+				//[group: 'com.navercorp.pinpoint', name: 'pinpoint-commons', version: "${pinpoint_version}", transitive: false],
+
 				[group: 'com.bbossgroups', name: 'bboss-core', version: "${bboss_version}", transitive: true],
 				[group: 'com.bbossgroups', name: 'bboss-velocity', version: "${bboss_version}", transitive: true],
 		)

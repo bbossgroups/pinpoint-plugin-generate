@@ -91,8 +91,6 @@ public class ${serviceName}OperationInterceptor extends SpanEventSimpleAroundInt
         recorder.recordServiceType(${serviceName}Plugin.${serviceName});
         recorder.recordException(throwable);
         if (recordArgs && args != null && args.length > 0) {
-            //recorder.recordApiCachedString(getMethodDescriptor(),convertParams(args),0);
-            //recorder.recordApi(getMethodDescriptor());
             recorder.recordAttribute(${serviceName}Plugin.ARGS_ANNOTATION_KEY,convertParams(args));
         } else {
             recorder.recordApi(getMethodDescriptor());
