@@ -28,10 +28,13 @@ public class GenConfig {
 	 */
 	private String pluginInterceptorType = pluginInterceptorSpanTraceType;
 	private int argKeyCode ;
+	private String argKeyName;
+	private String executionPolicy;
 	private boolean cleanSource = true;
 	private String serviceName;
 	private String servicePackage;
 	private int serviceType;
+	private int eventServiceType;
 	private boolean recordResult;
 	private boolean recordArgs;
 	private String pluginName;
@@ -187,5 +190,29 @@ public class GenConfig {
 
 	public void setArgKeyCode(int argKeyCode) {
 		this.argKeyCode = argKeyCode;
+	}
+
+	public String getArgKeyName() {
+		return argKeyName;
+	}
+
+	public void setArgKeyName(String argKeyName) {
+		this.argKeyName = argKeyName;
+	}
+
+	public String getExecutionPolicy() {
+		return executionPolicy;
+	}
+
+	public void setExecutionPolicy(String executionPolicy) {
+		this.executionPolicy = executionPolicy;
+	}
+
+	public int getEventServiceType() {
+		return eventServiceType;
+	}
+
+	public void setEventServiceType(int eventServiceType) {
+		this.eventServiceType = eventServiceType;
 	}
 }

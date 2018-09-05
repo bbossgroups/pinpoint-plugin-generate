@@ -52,71 +52,15 @@ public class ${serviceName}OperationInterceptor extends ${serviceName}BaseOperat
 
     @Override
     protected void doInBeforeTrace(SpanEventRecorder recorder, Object target, Object[] args,boolean newTrace) {
-//        if(newTrace) {
-//            StringBuilder buffer = new StringBuilder(256);
-//            buffer.append(methodDescriptor.getClassName());
-//            buffer.append(".");
-//            buffer.append(methodDescriptor.getMethodName());
-//            buffer.append(methodDescriptor.getParameterDescriptor());
-//            String rpc = buffer.toString();//builder.append();
-//            recorder.recordRpcName(rpc);
-//            recorder.recordEndPoint(rpc);
-////            recorder.recordRemoteAddress(rpc);
-//        }
-    }
-
-    private String convertParams(Object[] args){
-        if(args != null && args.length > 0){
-            StringBuilder builder = new StringBuilder();
-            for(Object arg:args) {
-                boolean isArray = arg != null && arg.getClass().isArray();
-
-
-                if(builder.length() > 0) {
-                    builder.append(",");
-
-                }
-                if(!isArray) {
-                    builder.append(arg);
-                }
-                else{
-                    convertArray(  arg,  builder);
-                }
-            }
-            return builder.toString();
-        }
-        return null;
-    }
-
-    private void convertArray(Object arg,StringBuilder builder){
-       {
-            builder.append("[");
-            Object[] fields = (Object[])arg;
-            boolean isfirst = true;
-            for(Object f:fields){
-                if(isfirst){
-                    isfirst = false;
-                }
-                else{
-                    builder.append(",");
-
-                }
-                builder.append(f);
-            }
-            builder.append("]");
-        }
-
     }
 
     @Override
     protected void doInAfterTrace(SpanEventRecorder recorder, Object target, Object[] args, Object result,
             Throwable throwable,boolean newTrace) {
-        recorder.recordServiceType(${serviceName}Plugin.${serviceName});
+        recorder.recordServiceType(${serviceName}Plugin.${serviceName}_EVENT);
         recorder.recordException(throwable);
         if (recordArgs && args != null && args.length > 0) {
-            //recorder.recordApiCachedString(getMethodDescriptor(),convertParams(args),0);
             recorder.recordApi(getMethodDescriptor());
-            //recorder.recordAttribute(AnnotationKey.ARGS0,convertParams(args));
             recorder.recordAttribute(${serviceName}Plugin.ARGS_ANNOTATION_KEY,convertParams(args));
         } else {
             recorder.recordApi(getMethodDescriptor());
@@ -132,10 +76,8 @@ public class ${serviceName}OperationInterceptor extends ${serviceName}BaseOperat
         recorder.recordServiceType(${serviceName}Plugin.${serviceName});
         recorder.recordException(throwable);
         if (recordArgs && args != null && args.length > 0) {
-            //recorder.recordApiCachedString(getMethodDescriptor(),convertParams(args),0);
             recorder.recordApi(getMethodDescriptor());
             recorder.recordAttribute(${serviceName}Plugin.ARGS_ANNOTATION_KEY,convertParams(args));
-            //recorder.recordAttribute(AnnotationKey.ARGS0,convertParams(args));
 
         } else {
             recorder.recordApi(getMethodDescriptor());

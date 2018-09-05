@@ -128,6 +128,9 @@ public class PluginGenerator {
 		velocityContext.put("pluginName",genConfig.getPluginName());
 		velocityContext.put("servicePackage",genConfig.getServicePackage());
 		velocityContext.put("serviceType",genConfig.getServiceType());
+
+		velocityContext.put("eventServiceType",genConfig.getEventServiceType());
+
 		velocityContext.put("pluginEnabled",genConfig.isPluginEnabled());
 
 		velocityContext.put("recordArgs",genConfig.isRecordArgs());
@@ -137,6 +140,15 @@ public class PluginGenerator {
 		velocityContext.put("pluginInterceptorType",genConfig.getPluginInterceptorType());
 
 		velocityContext.put("argKeyCode",genConfig.getArgKeyCode());
+		if(genConfig.getArgKeyName() == null || genConfig.getArgKeyName().equals(""))
+			velocityContext.put("argKeyName","ext.args");
+		else
+			velocityContext.put("argKeyName",genConfig.getArgKeyName());
+		if(genConfig.getExecutionPolicy() == null || genConfig.getExecutionPolicy().equals(""))
+			velocityContext.put("executionPolicy","BOUNDARY");
+		else
+			velocityContext.put("executionPolicy",genConfig.getExecutionPolicy());
+
 
 	}
 	public void genPlugin(){

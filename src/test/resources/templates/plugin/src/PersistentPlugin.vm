@@ -38,11 +38,13 @@ import com.navercorp.pinpoint.common.trace.*;
  * @author ${pluginAuthor}
  */
 public class ${serviceName}Plugin implements ProfilerPlugin, TransformTemplateAware {
-    public static final AnnotationKey ARGS_ANNOTATION_KEY = AnnotationKeyFactory.of(${argKeyCode}, "args", AnnotationKeyProperty.VIEW_IN_RECORD_SET);
+    public static final AnnotationKey ARGS_ANNOTATION_KEY = AnnotationKeyFactory.of(${argKeyCode}, "${argKeyName}", AnnotationKeyProperty.VIEW_IN_RECORD_SET);
 
     public static final ServiceType ${serviceName} = ServiceTypeFactory.of(${serviceType}, "${serviceName}",RECORD_STATISTICS);
     private static final String ${serviceName}_SCOPE = "${serviceName}_SCOPE";
-
+    #if($pluginInterceptorType.equals("spantrace"))
+    public static final ServiceType ${serviceName}_EVENT = ServiceTypeFactory.of(${eventServiceType}, "${serviceName}Event");
+    #end
     private final PLogger logger = PLoggerFactory.getLogger(this.getClass());
 
     private TransformTemplate transformTemplate;
@@ -125,7 +127,7 @@ public class ${serviceName}Plugin implements ProfilerPlugin, TransformTemplateAw
                     final List<InstrumentMethod> methodsToTrace = target.getDeclaredMethods(interceptorClassInfo.getMethodFilter());
                     for (InstrumentMethod methodToTrace : methodsToTrace) {
                         String operationInterceptor = "${servicePackage}.interceptor.${serviceName}OperationInterceptor";
-                        methodToTrace.addScopedInterceptor(operationInterceptor, ${serviceName}_SCOPE, ExecutionPolicy.BOUNDARY);
+                        methodToTrace.addScopedInterceptor(operationInterceptor, ${serviceName}_SCOPE, ExecutionPolicy.${executionPolicy});
                     }
                     return target.toBytecode();
                 }

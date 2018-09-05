@@ -24,6 +24,7 @@ import com.navercorp.pinpoint.common.trace.AnnotationKey;
 import ${servicePackage}.${serviceName}Plugin;
 
 /**
+ * 适用于SpanEvent的拦截器
  * @author ${pluginAuthor}
  */
 public class ${serviceName}OperationInterceptor extends SpanEventSimpleAroundInterceptorForPlugin {
@@ -90,9 +91,7 @@ public class ${serviceName}OperationInterceptor extends SpanEventSimpleAroundInt
         recorder.recordServiceType(${serviceName}Plugin.${serviceName});
         recorder.recordException(throwable);
         if (recordArgs && args != null && args.length > 0) {
-            recorder.recordApiCachedString(getMethodDescriptor(),convertParams(args),0);
-            //recorder.recordApi(getMethodDescriptor());
-            //recorder.recordAttribute(${serviceName}Plugin.ARGS_ANNOTATION_KEY,convertParams(args));
+            recorder.recordAttribute(${serviceName}Plugin.ARGS_ANNOTATION_KEY,convertParams(args));
         } else {
             recorder.recordApi(getMethodDescriptor());
         }

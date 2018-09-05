@@ -46,6 +46,12 @@ plugin.serviceName=BBossElastic
 ## 定义插件程序对应的类路径
 plugin.package=org.test.plugin.bbosselastic
 
+## 插件采集的链路日志类型：
+ spanevent，上下文环境没有trace，丢弃日志数据，有trace则加入其中，日志被记录,spanevent类型用于生成普通的日志采集插件
+ spantrace(默认值), 上下文环境没有trace，创建trace并记录日志数据，有trace则加入其中，spantrace即可用于生成普通的日志采集插件，亦可以用于生成服务器端点使用的插件
+##
+plugin.interceptor.type=spantrace
+
 ## 定义插件对应的服务类型代码，serviceType需要向开发组申请，必须保持全局唯一,并且是short类型的数字
 ## 数值空间含义说明
 	UNDEFINED_CATEGORY((short)-1, (short)-1),
@@ -55,10 +61,27 @@ plugin.package=org.test.plugin.bbosselastic
     LIBRARY((short)5000, (short)7999),
     CACHE_LIBRARY((short)8000, (short)8999, BaseHistogramSchema.FAST_SCHEMA),
     RPC((short)9000, (short)9999);
+    
+    ServiceType Code Pinpoint 团队给出的私有区域范围
+    
+    类型	范围
+    Server	1900 ~ 1999
+    DB Client	2900 ~ 2999
+    Cache Client	8900 ~ 8999
+    RPC Client	9900 ~ 9999
+    Others	7500 ~ 7999
 ## 类型配置
 plugin.serviceType=1027
-## 参数key，需要向开发组申请，必须保持全局唯一,并且是short类型的数字
+
+##
+# plugin.interceptor.type为spantrace时必须同时指定一个eventServiceType类型
+##
+plugin.eventServiceType=1028
+
+## 参数AnnotationKey，需要向开发组申请，必须保持全局唯一,并且是short类型的数字
+## AnnotationKey 的 code 字段也是全局唯一的，Pinpoint 团队给出的私有区域范围是 900 到 999
 plugin.argKeyCode=911
+plugin.argKeyName=911.args
 
 ## 定义默认是否启用插件
 profiler.enable=true
@@ -98,11 +121,19 @@ profiler.recordArgs=true
 ## 需要拦截类和方法举例说明
 plugin.interceptor.classes=org.frameworkset.elasticsearch.client.ConfigRestClientUtil|*,discover~0 \                           
                            org.frameworkset.elasticsearch.client.RestClientUtil|*,discover~0
-## 插件采集的链路日志类型：
- spanevent，上下文环境没有trace，丢弃日志数据，有trace则加入其中，日志被记录,spanevent类型用于生成普通的日志采集插件
- spantrace(默认值), 上下文环境没有trace，创建trace并记录日志数据，有trace则加入其中，spantrace即可用于生成普通的日志采集插件，亦可以用于生成服务器端点使用的插件
+
 ##
-plugin.interceptor.type=spantrace
+# Pinpoint 的拦截器可以任意拦截方法，因此被拦截的方法之间可能会有调用关系，
+# 这会导致追踪数据被重复收集，因此 Pinpoint 提供了 Scope 和 ExecutionPolicy 功能。
+# 在一个 Scope 内，可以定义拦截器的执行策略：是每次都执行 (ExecutionPolicy.ALWAYS)，
+# 还是在没有更外层的拦截器存在的时候执行 (ExecutionPolicy.BOUNDARY)，
+# 或者必须在有外层拦截器存在的时候执行 (ExecutionPolicy.INTERNAL)
+# ALWAYS,
+# BOUNDARY,
+# INTERNAL
+##
+plugin.executionPolicy = BOUNDARY
+
 ## 生成插件完毕后，是否清空生成过程中产生的插件源码工程（基于gradle)，true 清空 false 不清空
 plugin.deleteFilesAfterGen=false
 
@@ -151,7 +182,8 @@ BBossElastic.png
 拷贝图片到路径（以实际目录为准）：
 小图标路径地址：/home/elk/tomcat-7.0.57-web/webapps/ROOT/images/icons/BBossElastic.png
 大图标路径地址：/home/elk/tomcat-7.0.57-web/webapps/ROOT/images/servermap/BBossElastic.png
-需要将服务类型和图片名称加入js文件/components/server-map2/jquery.ServerMap2.js的htIcons 中：
+
+需要将服务类型和图片名称加入js文件/components/server-map2/jquery.ServerMap2.js的htIcons 中：（1.7.3以后的版本不需要加）
 Then, add ServiceType name and the image file name to htIcons in
 /components/server-map2/jquery.ServerMap2.js
 
@@ -162,6 +194,17 @@ Then, add ServiceType name and the image file name to htIcons in
 },
 
 ````
+
+## 技术交流群:166471282 
+     
+## 微信公众号:bbossgroup   
+![GitHub Logo](https://static.oschina.net/uploads/space/2017/0617/094201_QhWs_94045.jpg)
+
+## License
+
+The BBoss Framework is released under version 2.0 of the [Apache License][].
+
+[Apache License]: http://www.apache.org/licenses/LICENSE-2.0
 
  
 
