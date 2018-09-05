@@ -195,5 +195,16 @@ Then, add ServiceType name and the image file name to htIcons in
 
 ````
 
+## 技术交流群:166471282 
+     
+## 微信公众号:bbossgroup   
+![GitHub Logo](https://static.oschina.net/uploads/space/2017/0617/094201_QhWs_94045.jpg)
+
+## License
+
+The BBoss Framework is released under version 2.0 of the [Apache License][].
+
+[Apache License]: http://www.apache.org/licenses/LICENSE-2.0
+
  
 
