@@ -1,0 +1,74 @@
+/**
+*  Copyright 2008 biaoping.yin
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*/
+package ${servicePackage};
+
+import com.navercorp.pinpoint.common.trace.*;
+
+import static com.navercorp.pinpoint.common.trace.ServiceTypeProperty.RECORD_STATISTICS;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author ${pluginAuthor}
+ */
+public class ${serviceName}Constants {
+    public static final AnnotationKey ARGS_ANNOTATION_KEY = AnnotationKeyFactory.of(${argKeyCode}, "${argKeyName}", AnnotationKeyProperty.VIEW_IN_RECORD_SET);
+
+    public static final ServiceType ${serviceName} = ServiceTypeFactory.of(${serviceType}, "${serviceName}",RECORD_STATISTICS);
+    public static final String ${serviceName}_SCOPE = "${serviceName}_SCOPE";
+    #if($pluginInterceptorType.equals("spantrace"))
+    public static final ServiceType ${serviceName}_EVENT = ServiceTypeFactory.of(${eventServiceType}, "${serviceName}Event");
+    #end
+    public static final List<${serviceName}InterceptorClassInfo> clazzInterceptors = new ArrayList<${serviceName}InterceptorClassInfo>();
+    static{
+        ${serviceName}InterceptorClassInfo interceptorClassInfo = null;
+        List<${serviceName}MethodInfo> methodInfos = null;
+        ${serviceName}MethodInfo methodInfo = null;
+        #foreach($interceptorClass in $interceptorClasses)
+            interceptorClassInfo = new ${serviceName}InterceptorClassInfo();
+            interceptorClassInfo.setInterceptorClass("$interceptorClass.interceptorClass");
+            #if($interceptorClass.getAllAccept())
+                methodInfo = new ${serviceName}MethodInfo();
+                methodInfo.setFilterType($interceptorClass.getAllAccept().getFilterType());
+                methodInfo.setName("$interceptorClass.getAllAccept().getName()");
+                methodInfo.setPattern($interceptorClass.getAllAccept().isPattern());
+                interceptorClassInfo.setAllAccept(methodInfo);
+            #end
+            #if($interceptorClass.getAllReject())
+                methodInfo = new ${serviceName}MethodInfo();
+                methodInfo.setFilterType($interceptorClass.getAllReject().getFilterType());
+                methodInfo.setName("$interceptorClass.getAllReject().getName()");
+                methodInfo.setPattern($interceptorClass.getAllReject().isPattern());
+                interceptorClassInfo.setAllReject(methodInfo);
+            #end
+
+            methodInfos = null;
+            #if($interceptorClass.interceptorMehtods)
+                methodInfos = new ArrayList<${serviceName}MethodInfo>();
+                #foreach($m in $interceptorClass.interceptorMehtods)
+                    methodInfo = new ${serviceName}MethodInfo();
+                    methodInfo.setFilterType($m.getFilterType());
+                    methodInfo.setName("$m.getName()");
+                    methodInfo.setPattern($m.isPattern());
+                    methodInfos.add(methodInfo);
+                #end
+            #end
+            interceptorClassInfo.setInterceptorMehtods(methodInfos);
+            interceptorClassInfo.setMethodFilter(new ${serviceName}CustomMethodFilter(null,interceptorClassInfo));
+            clazzInterceptors.add(interceptorClassInfo);
+        #end
+        }
+}

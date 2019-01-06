@@ -116,7 +116,8 @@ configure(allprojects) { project ->
 		testCompile 'junit:junit:4.12'
 	
 		compile(
-				fileTree(dir: '../lib', include: '**/*'),
+				//fileTree(dir: '../lib', include: '**/*'),
+				fileTree(dir: 'lib', include: '**/*'),
 
 		)
 

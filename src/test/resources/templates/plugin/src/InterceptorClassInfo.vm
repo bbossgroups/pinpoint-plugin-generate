@@ -19,6 +19,9 @@ import com.navercorp.pinpoint.bootstrap.instrument.MethodFilter;
 
 import java.util.List;
 
+/**
+* @author ${pluginAuthor}
+*/
 public class ${serviceName}InterceptorClassInfo {
 	private List<${serviceName}MethodInfo> interceptorMehtods ;
 	private MethodFilter methodFilter;

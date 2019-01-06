@@ -1,4 +1,9 @@
-This is a pinpoint agent plugin generate tool.
+This is a pinpoint agent plugin generate tool，has two functions: 
+
+1. generator plugin gradle project.
+2. build and archive the plugin jar,config and images.
+
+![](readme.png)
 
 以分布式全文检索elasticsearch客户端框架[bboss elasticsearch](https://www.oschina.net/p/bboss-elastic)为实例，介绍服务调用链路日志采集插件的生成及集成方法，
 
@@ -196,7 +201,7 @@ Then, add ServiceType name and the image file name to htIcons in
 ````
 
 ## 技术交流群:166471282 
-     
+
 ## 微信公众号:bbossgroup   
 ![GitHub Logo](https://static.oschina.net/uploads/space/2017/0617/094201_QhWs_94045.jpg)
 

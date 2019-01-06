@@ -21,7 +21,7 @@ import com.navercorp.pinpoint.bootstrap.context.SpanEventRecorder;
 import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.interceptor.SpanEventSimpleAroundInterceptorForPlugin;
 import com.navercorp.pinpoint.common.trace.AnnotationKey;
-import ${servicePackage}.${serviceName}Plugin;
+import ${servicePackage}.${serviceName}Constants;
 
 /**
  * 适用于SpanEvent的拦截器
@@ -88,10 +88,10 @@ public class ${serviceName}OperationInterceptor extends SpanEventSimpleAroundInt
     @Override
     protected void doInAfterTrace(SpanEventRecorder recorder, Object target, Object[] args, Object result,
             Throwable throwable) {
-        recorder.recordServiceType(${serviceName}Plugin.${serviceName});
+        recorder.recordServiceType(${serviceName}Constants.${serviceName});
         recorder.recordException(throwable);
         if (recordArgs && args != null && args.length > 0) {
-            recorder.recordAttribute(${serviceName}Plugin.ARGS_ANNOTATION_KEY,convertParams(args));
+            recorder.recordAttribute(${serviceName}Constants.ARGS_ANNOTATION_KEY,convertParams(args));
         } else {
             recorder.recordApi(getMethodDescriptor());
         }

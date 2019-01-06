@@ -15,6 +15,9 @@ package ${servicePackage};
  *  limitations under the License.
  */
 
+/**
+* @author ${pluginAuthor}
+*/
 public class ${serviceName}MethodInfo {
 	public static final int FILTER_ACCEPT_TYPE = 1;
 	public  static final int FILTER_REJECT_TYPE = 0;

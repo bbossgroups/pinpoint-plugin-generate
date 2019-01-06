@@ -32,7 +32,7 @@ public final class ${serviceName}ProviderDetector implements ApplicationTypeDete
 
     @Override
     public ServiceType getApplicationType() {
-        return ${serviceName}Plugin.${serviceName};
+        return ${serviceName}Constants.${serviceName};
     }
 
     @Override

@@ -30,63 +30,17 @@ import com.navercorp.pinpoint.common.trace.ServiceTypeFactory;
 
 import java.security.ProtectionDomain;
 import java.util.List;
-import java.util.ArrayList;
 
-import static com.navercorp.pinpoint.common.trace.ServiceTypeProperty.RECORD_STATISTICS;
+
 import com.navercorp.pinpoint.common.trace.*;
 /**
  * @author ${pluginAuthor}
  */
 public class ${serviceName}Plugin implements ProfilerPlugin, TransformTemplateAware {
-    public static final AnnotationKey ARGS_ANNOTATION_KEY = AnnotationKeyFactory.of(${argKeyCode}, "${argKeyName}", AnnotationKeyProperty.VIEW_IN_RECORD_SET);
 
-    public static final ServiceType ${serviceName} = ServiceTypeFactory.of(${serviceType}, "${serviceName}",RECORD_STATISTICS);
-    private static final String ${serviceName}_SCOPE = "${serviceName}_SCOPE";
-    #if($pluginInterceptorType.equals("spantrace"))
-    public static final ServiceType ${serviceName}_EVENT = ServiceTypeFactory.of(${eventServiceType}, "${serviceName}Event");
-    #end
     private final PLogger logger = PLoggerFactory.getLogger(this.getClass());
 
     private TransformTemplate transformTemplate;
-    private static final List<${serviceName}InterceptorClassInfo> clazzInterceptors = new ArrayList<${serviceName}InterceptorClassInfo>();
-    static{
-        ${serviceName}InterceptorClassInfo interceptorClassInfo = null;
-        List<${serviceName}MethodInfo> methodInfos = null;
-        ${serviceName}MethodInfo methodInfo = null;
-    #foreach($interceptorClass in $interceptorClasses)
-        interceptorClassInfo = new ${serviceName}InterceptorClassInfo();
-        interceptorClassInfo.setInterceptorClass("$interceptorClass.interceptorClass");
-        #if($interceptorClass.getAllAccept())
-            methodInfo = new ${serviceName}MethodInfo();
-            methodInfo.setFilterType($interceptorClass.getAllAccept().getFilterType());
-            methodInfo.setName("$interceptorClass.getAllAccept().getName()");
-            methodInfo.setPattern($interceptorClass.getAllAccept().isPattern());
-            interceptorClassInfo.setAllAccept(methodInfo);
-        #end
-        #if($interceptorClass.getAllReject())
-            methodInfo = new ${serviceName}MethodInfo();
-            methodInfo.setFilterType($interceptorClass.getAllReject().getFilterType());
-            methodInfo.setName("$interceptorClass.getAllReject().getName()");
-            methodInfo.setPattern($interceptorClass.getAllReject().isPattern());
-            interceptorClassInfo.setAllReject(methodInfo);
-        #end
-
-        methodInfos = null;
-        #if($interceptorClass.interceptorMehtods)
-            methodInfos = new ArrayList<${serviceName}MethodInfo>();
-            #foreach($m in $interceptorClass.interceptorMehtods)
-                methodInfo = new ${serviceName}MethodInfo();
-                methodInfo.setFilterType($m.getFilterType());
-                methodInfo.setName("$m.getName()");
-                methodInfo.setPattern($m.isPattern());
-                methodInfos.add(methodInfo);
-            #end
-        #end
-        interceptorClassInfo.setInterceptorMehtods(methodInfos);
-        interceptorClassInfo.setMethodFilter(new ${serviceName}CustomMethodFilter(null,interceptorClassInfo));
-        clazzInterceptors.add(interceptorClassInfo);
-    #end
-    }
 
     @Override
     public void setup(ProfilerPluginSetupContext context) {
@@ -109,12 +63,12 @@ public class ${serviceName}Plugin implements ProfilerPlugin, TransformTemplateAw
     * Blackcat profiler agent uses this detector to find out the service type of current application.
     */
     private void addApplicationTypeDetector(ProfilerPluginSetupContext context) {
-        context.addApplicationTypeDetector(new ${serviceName}ProviderDetector(clazzInterceptors));
+        context.addApplicationTypeDetector(new ${serviceName}ProviderDetector(${serviceName}Constants.clazzInterceptors));
     }
 
     //  implementations
     private void add${serviceName}Interceptors() {
-        for (final ${serviceName}InterceptorClassInfo interceptorClassInfo : clazzInterceptors) {
+        for (final ${serviceName}InterceptorClassInfo interceptorClassInfo : ${serviceName}Constants.clazzInterceptors) {
             transformTemplate.transform(interceptorClassInfo.getInterceptorClass(), new TransformCallback() {
 
                 @Override
@@ -127,7 +81,7 @@ public class ${serviceName}Plugin implements ProfilerPlugin, TransformTemplateAw
                     final List<InstrumentMethod> methodsToTrace = target.getDeclaredMethods(interceptorClassInfo.getMethodFilter());
                     for (InstrumentMethod methodToTrace : methodsToTrace) {
                         String operationInterceptor = "${servicePackage}.interceptor.${serviceName}OperationInterceptor";
-                        methodToTrace.addScopedInterceptor(operationInterceptor, ${serviceName}_SCOPE, ExecutionPolicy.${executionPolicy});
+                        methodToTrace.addScopedInterceptor(operationInterceptor, ${serviceName}Constants.${serviceName}_SCOPE, ExecutionPolicy.${executionPolicy});
                     }
                     return target.toBytecode();
                 }

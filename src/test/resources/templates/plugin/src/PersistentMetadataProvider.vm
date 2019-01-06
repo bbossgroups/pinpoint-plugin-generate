@@ -21,8 +21,8 @@ import com.navercorp.pinpoint.common.trace.AnnotationKeyMatchers;
 import com.navercorp.pinpoint.common.trace.TraceMetadataProvider;
 import com.navercorp.pinpoint.common.trace.TraceMetadataSetupContext;
 
-import static ${servicePackage}.${serviceName}Plugin.${serviceName};
-import static ${servicePackage}.${serviceName}Plugin.${serviceName}_EVENT;
+import static ${servicePackage}.${serviceName}Constants.${serviceName};
+import static ${servicePackage}.${serviceName}Constants.${serviceName}_EVENT;
 
 /**
  *
@@ -38,7 +38,7 @@ public class ${serviceName}MetadataProvider implements TraceMetadataProvider {
         context.addServiceType(${serviceName}_EVENT);
         #end
         //context.addServiceType(${serviceName}, AnnotationKeyMatchers.exact(AnnotationKey.ARGS0));
-        context.addAnnotationKey(${serviceName}Plugin.ARGS_ANNOTATION_KEY);
+        context.addAnnotationKey(${serviceName}Constants.ARGS_ANNOTATION_KEY);
     }
 
 }

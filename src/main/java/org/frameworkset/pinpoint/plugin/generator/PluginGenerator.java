@@ -43,6 +43,7 @@ public class PluginGenerator {
 	private File pluginProjectJavaSpanTraceInterceptorFile;
 	private File pluginProjectJavaDetectFile;
 	private File pluginProjectJavaPluginFile;
+	private File pluginProjectJavaPluginConstantsFile;
 	private File pluginProjectJavaPluginConfigFile;
 	private File pluginProjectJavaMethodInfoFile;
 	private File pluginProjectJavaMethodFilterFile;
@@ -53,6 +54,8 @@ public class PluginGenerator {
 	private File pluginProjectDir;
 
 	private File pluginArchiveDir;
+	private File pluginLibDir;
+	private File toolLibDir;
 	private String packageDir;
 	private VelocityContext velocityContext;
 	public PluginGenerator(GenConfig genConfig,File appDir){
@@ -68,12 +71,14 @@ public class PluginGenerator {
 		if(this.pluginProjectDir.exists())
 			FileUtil.deleteFile(this.pluginProjectDir);
 		this.pluginArchiveDir = new File(appDir,"dist");
+		this.toolLibDir = new File(appDir,"lib");
 		if(this.pluginArchiveDir.exists())
 			FileUtil.deleteFile(this.pluginArchiveDir);
 		this.packageDir = genConfig.getServicePackage().replace('.','/');
 		pluginProjectGradleBuildFile = new File(this.pluginProjectDir,"build.gradle");
+		pluginLibDir = new File(this.pluginProjectDir,"lib");
 		String src = "src/main/java";
-		String resources = "src/main/resources";
+//		String resources = "src/main/resources";
 		pluginProjectGradleBuildPropertiesFile = new File(this.pluginProjectDir,"gradle.properties");
 		pluginProjectGradleBuildSHFile = new File(this.pluginProjectDir,"build.sh");
 		pluginProjectGradleBuildBatFile = new File(this.pluginProjectDir,"build.bat");
@@ -96,6 +101,8 @@ public class PluginGenerator {
 		}
 		 pluginProjectJavaPluginFile = new File(this.pluginProjectDir,
 				 src+"/"+this.packageDir+"/"+genConfig.getServiceName()+"Plugin.java");
+		pluginProjectJavaPluginConstantsFile = new File(this.pluginProjectDir,
+				src+"/"+this.packageDir+"/"+genConfig.getServiceName()+"Constants.java");
 		 pluginProjectJavaPluginConfigFile = new File(this.pluginProjectDir,
 				 src+"/"+this.packageDir+"/"+genConfig.getServiceName()+"PluginConfig.java");
 
@@ -115,6 +122,25 @@ public class PluginGenerator {
 				 "plugin.config");
 		if(!pluginArchiveDir.exists()){
 			pluginArchiveDir.mkdirs();
+		}
+	}
+	private void copyPinpointLibs()  {
+		File[] pinpointLibs = this.toolLibDir.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.isFile() && pathname.getName().startsWith("pinpoint-") && !pathname.getName().startsWith("pinpoint-plugin-generate");
+			}
+		});
+		if(!pluginLibDir.exists()){
+			pluginLibDir.mkdirs();
+		}
+		for(int i = 0; i < pinpointLibs.length; i ++){
+			try {
+				FileUtil.copy(pinpointLibs[i], this.pluginLibDir.getCanonicalPath());
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 	private void initVelocityContext(){
@@ -158,6 +184,7 @@ public class PluginGenerator {
 		this.genBuildFile();
 		genImages();
 		this.genReadMeFile();
+		this.copyPinpointLibs();
 		this.archivePlugin();
 		this.releaseFiles();
 
@@ -191,6 +218,8 @@ public class PluginGenerator {
 		}
 
 		_genFile("plugin/src/PersistentPlugin.vm",this.pluginProjectJavaPluginFile);
+		_genFile("plugin/src/Constants.vm",this.pluginProjectJavaPluginConstantsFile);
+
 
 		_genFile("plugin/src/PersistentPluginConfig.vm",this.pluginProjectJavaPluginConfigFile);
 
