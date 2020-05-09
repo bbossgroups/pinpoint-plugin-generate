@@ -155,7 +155,8 @@ configure(allprojects) { project ->
 			{
 				expand(
 						bboss_version:"${bboss_version}",
-                        project:"${project.name}"
+                                                project:"${project.name}",
+                                                RT_JAVA_OPTS:"-server"
 						)
 
 			}		
