@@ -1,3 +1,5 @@
+def profile = System.getProperty("profile") ?: "dev"
+
 configure(allprojects) { project ->
 	group = PROJ_GROUP
 	version = PROJ_VERSION
@@ -7,7 +9,7 @@ configure(allprojects) { project ->
 	apply plugin: "eclipse"
 	apply plugin: "idea"
 	apply plugin: "signing"
-	apply plugin: "maven"
+	apply plugin: "java-library"
 	eclipse {
 		jdt {
 			//if you want to alter the java versions (by default they are configured with gradle java plugin settings):
@@ -37,17 +39,21 @@ configure(allprojects) { project ->
 	}
 
 	task sourcesJar(type: Jar) {
-		classifier = "sources"
-		from sourceSets.main.allJava
+	   archiveClassifier = "sources"
+	   from sourceSets.main.allJava
+	   duplicatesStrategy = DuplicatesStrategy.INCLUDE
 	}
-
+	processResources {
+	   duplicatesStrategy = DuplicatesStrategy.INCLUDE
+	}
 	task javaDocJar(type: Jar, dependsOn: javadoc) {
-		classifier = "javadoc"
-		from javadoc.destinationDir
+	   archiveClassifier = "javadoc"
+	   from javadoc.destinationDir
 	}
 	artifacts {
-		archives sourcesJar, javaDocJar
+	   archives sourcesJar, javaDocJar
 	}
+
 
 	jar {
 		manifest {
@@ -68,7 +74,7 @@ configure(allprojects) { project ->
 	repositories {
 		mavenLocal()
 		 maven {
-	        url "http://maven.aliyun.com/nexus/content/groups/public"
+	        url "https://maven.aliyun.com/nexus/content/groups/public"
 	    }
 		 maven {
 	        url "https://artifacts.elastic.co/maven"
@@ -90,11 +96,21 @@ configure(allprojects) { project ->
 				srcDir 'src/main/java'
 
 			}
-			resources {
-				srcDir 'src/main/resources'
-				srcDir 'src/main/java'  exclude '**/*.java'
+			if(profile == "dev") {
+				resources {
+					srcDir 'src/main/resources'
+					srcDir 'src/main/java' exclude '**/*.java'
+				}
+			}
+			else{
+				resources {
+					srcDir 'src/main/resources' exclude '**/*'
+					srcDir 'src/main/java' exclude '**/*.java'
+				}
 			}
 
+
+//			compileClasspath = configurations.compile + configurations.runtime
 		}
 		test {
 			java {
@@ -111,41 +127,69 @@ configure(allprojects) { project ->
 	}
 
 
-
 	dependencies {
-		testCompile 'junit:junit:4.12'
-	
-		compile(
-				//fileTree(dir: '../lib', include: '**/*'),
-				fileTree(dir: 'lib', include: '**/*'),
-
+		testImplementation 'junit:junit:4.13.1'
+		
+		api(
+			fileTree(dir: 'lib', include: '**/*.jar')  
+				 
 		)
 
 	}
 
 
 
-	task copyJarFiles(type: Sync,dependsOn:'install'){
+	task copyJarFiles(type: Sync,dependsOn:'jar'){		
+		from configurations.api{
+		 canBeResolved=true
 
+		}
 		from jar.outputs
-		into 'build/dist/'
+		exclude { details -> details.file.name.startsWith('bboss-rt')  }
+		into 'build/dist/lib'
 
 	}
 
+	task copyRTJarFiles(type: Copy,dependsOn:'copyJarFiles'){
+		
+		 from configurations.api{
+			 canBeResolved=true
 
+			}
+		 include { details -> details.file.name.startsWith('bboss-rt')  }
+		 into 'build/dist'
+	     rename ("bboss-rt-${bboss_version}.jar", "${project.name}-${bboss_version}.jar")
+	}
+	task copyToolFiles(type: Copy ,dependsOn:'copyRTJarFiles')  {
+		
+		from ('runfiles')
+			{
+				expand(
+						bboss_version:"${bboss_version}",
+                        project:"${project.name}"
+						)
+
+			}		
+		filteringCharset = 'UTF-8'
+		into 'build/dist/'
+
+
+
+	}
 	task copyResourcesfiles(type: Sync )  {
-		from fileTree(dir: 'src/test/resources')
+		from fileTree(dir: 'src/main/resources')
 		filteringCharset = 'UTF-8'
 		into 'build/dist/resources'
 	}
 
-	task releaseVersion(type: Zip,dependsOn:['copyJarFiles','copyResourcesfiles']) {
+	task releaseVersion(type: Zip,dependsOn:['copyToolFiles','copyResourcesfiles']) {
 
 		//appendix = 'wrapper'
-		classifier = 'released'
+		archiveClassifier = 'released'
 		from 'build/dist/'
 
 	}
+
 }
 
 

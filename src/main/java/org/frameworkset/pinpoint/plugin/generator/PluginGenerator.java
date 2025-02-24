@@ -20,6 +20,7 @@ import bboss.org.apache.velocity.VelocityContext;
 import com.frameworkset.util.FileUtil;
 import com.frameworkset.util.VelocityUtil;
 import org.frameworkset.runtime.CommonLauncher;
+import org.frameworkset.runtime.OSInfo;
 import org.frameworkset.runtime.StreamGobbler;
 import org.frameworkset.util.encoder.Charsets;
 import org.slf4j.Logger;
@@ -275,7 +276,7 @@ public class PluginGenerator {
 	}
 	protected void chmodx() throws IOException
 	{
-		Process proc = !CommonLauncher.isOSX()?
+		Process proc = !OSInfo.isMacOSX()?
 				Runtime.getRuntime().exec("chmod +x -R "+
 						this.pluginProjectDir
 								.getCanonicalPath()):
@@ -298,7 +299,7 @@ public class PluginGenerator {
 	private void archivePlugin(){
 		try {
 			Process proc = null;
-			if (CommonLauncher.isWindows()) {
+			if (OSInfo.isWindows()) {
 
 				proc = Runtime.getRuntime().exec(
 						new File(this.pluginProjectDir, "/build.bat")
